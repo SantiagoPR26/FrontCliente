@@ -1,0 +1,115 @@
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png"
+        alt=""
+        width="30px"
+      />
+      Gestor de Clientes
+    </a>
+  </div>
+</nav>
+
+<div class="col-md-12 p-2 mt-5">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#clienteModal"
+    (click)="newClient()"
+  >
+    <i class="fa fa-user" aria-hidden="true"></i> Nuevo Cliente
+  </button>
+
+  <div class="client-table">
+    <h1>Lista de Clientes</h1>
+    
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Tipo de Identificacion</th>
+          <th>Identificacion</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cli of listClientes">
+          <td>{{ cli.tipoId }}</td>
+          <td>{{ cli.id }}</td>
+          <td>{{ cli.nombre }}</td>
+          <td>{{ cli.apellido }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#clienteModal"
+              (click)="selectItems(cli)"
+            >
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-danger" (click)="deleteClient(cli.id)">
+              <i class="fa fas fa-trash" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="clienteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ !isUpdate ? "New client" : "Update Client" }}
+        </h5>
+        <button #closebutton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formCliente">
+          <div class="col-md-12">
+            <label class="form-label">Tipo Id</label>
+            <select class="form-control" name="" id="" formControlName="tipoId" required>
+              <option value="CC">CC</option>
+              <option value="TI">TI</option>
+              <option value="PAS">Pasaporte</option>
+            </select>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Id</label>
+            <input type="text" class="form-control" formControlName="id" required />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" formControlName="nombre" required/>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Apellido</label>
+            <input type="text" class="form-control" formControlName="apellido" required/>
+          </div>
+          <div class="col-md-12">
+            <input type="text" class="form-control input-estado" formControlName="estado"/>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button *ngIf="!isUpdate" [disabled]= "formCliente.invalid" type="submit" class="btn btn-primary" (click)="saveClient()">Save</button>
+        <button *ngIf="isUpdate" [disabled]= "formCliente.invalid" type="submit" class="btn btn-warning" (click)="updateClient()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
